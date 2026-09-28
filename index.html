@@ -1,104 +1,57 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>G2 Master BLE Lab V4</title>
+<meta name="theme-color" content="#07090c"><title>G2 Master BLE Lab V3</title>
 <style>
-:root{color-scheme:dark;--bg:#080b0e;--card:#11171c;--line:#26313a;--text:#f4f7f9;--muted:#91a0aa;--good:#75f0ad;--warn:#ffca62;--bad:#ff7070}
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:15px system-ui,-apple-system,sans-serif}
-main{max-width:760px;margin:auto;padding:18px}.title{font-size:24px;font-weight:800}.sub{color:var(--muted);margin:5px 0 18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:12px;border:1px solid var(--line);border-radius:13px}
-.stat b{display:block;margin-top:5px}.good{color:var(--good)}.warn{color:var(--warn)}.bad{color:var(--bad)}
-button{width:100%;padding:15px;border:0;border-radius:13px;font-weight:800;font-size:15px;margin-top:10px}
-#connect{background:#e9f0f4;color:#071015}#status{background:#ffca62;color:#181000}#status:disabled{opacity:.35}
-pre{white-space:pre-wrap;word-break:break-word;background:#06090b;border-radius:12px;padding:12px;min-height:190px;max-height:420px;overflow:auto;font:12px ui-monospace,monospace}
-small{color:var(--muted)}
-</style>
-</head>
-<body><main>
-<div class="title">G2 MASTER • BLE LAB V4</div>
-<div class="sub">Test contrôlé de REQUEST_STATUS — aucune commande automatique.</div>
-
-<div class="card">
- <div class="grid">
-  <div class="stat">Connexion<b id="conn">DÉCONNECTÉ</b></div>
-  <div class="stat">Service 7777<b id="svc">—</b></div>
-  <div class="stat">Écriture 8877<b id="wr">—</b></div>
-  <div class="stat">Notifications 8888<b id="ntf">—</b></div>
-  <div class="stat">Paquets reçus<b id="count">0</b></div>
-  <div class="stat">Dernier paquet<b id="last">—</b></div>
- </div>
- <button id="connect">CONNECTER LA TROTTINETTE</button>
+*{box-sizing:border-box}body{margin:0;background:#07090c;color:#f5f7fa;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:760px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.brand{font-weight:900;letter-spacing:.15em}.pill{padding:8px 12px;border:1px solid #29303a;border-radius:999px;color:#aeb7c4;font-size:12px}
+.card{background:#10141a;border:1px solid #252c36;border-radius:22px;padding:20px;margin-bottom:14px}
+h1{font-size:25px;margin:0 0 7px}.sub{color:#909aa8;font-size:13px}.row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid #242b34}.row:last-child{border:0}
+.ok{color:#73e69a;font-weight:800}.wait{color:#f2c86b;font-weight:800}.bad{color:#ff7474;font-weight:800}
+button{width:100%;border:0;border-radius:17px;padding:18px;font-size:16px;font-weight:900;background:#ff5938;color:white;margin:4px 0 14px}
+button:disabled{opacity:.45}.secondary{background:#1b222b;border:1px solid #303946}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#080a0d;border:1px solid #252c36;border-radius:16px;padding:14px;min-height:210px;max-height:420px;overflow:auto;color:#cad4df;font-size:12px;line-height:1.55}
+.note{font-size:12px;color:#828c99;text-align:center;margin:8px 10px 24px}
+</style></head><body><div class="wrap">
+<div class="top"><div class="brand">G2 MASTER</div><div class="pill">BLE LAB V3</div></div>
+<div class="card"><h1>Analyse GATT</h1><div class="sub">Diagnostic uniquement : aucune écriture sur 8877.</div>
+<div class="row"><span>Connexion</span><span id="conn" class="wait">NON CONNECTÉ</span></div>
+<div class="row"><span>Service 7777</span><span id="svc" class="wait">—</span></div>
+<div class="row"><span>Écriture 8877</span><span id="wr" class="wait">—</span></div>
+<div class="row"><span>Notifications 8888</span><span id="ntf" class="wait">—</span></div>
+<div class="row"><span>Paquets reçus</span><span id="count">0</span></div></div>
+<button id="connect">CONNECTER G2 MASTER</button>
+<button id="clear" class="secondary">EFFACER LE JOURNAL</button>
+<div class="card"><h1>Journal BLE brut</h1><pre id="log"></pre></div>
+<div class="note">V3 n'envoie aucune commande à la trottinette. Elle découvre 8877 et écoute seulement 8888.</div>
 </div>
-
-<div class="card">
- <b>Test REQUEST_STATUS</b>
- <p><small>Envoie une seule fois <b>FF 55 01 00 55</b> sur 8877. Aucun réglage, verrouillage ou cruise-control n'est envoyé.</small></p>
- <button id="status" disabled>TESTER LA REQUÊTE STATUS</button>
-</div>
-
-<div class="card"><b>Journal BLE</b><pre id="log"></pre></div>
-
 <script>
-const SERVICE='00007777-0000-1000-8000-00805f9b34fb';
-const WRITE='00008877-0000-1000-8000-00805f9b34fb';
-const NOTIFY='00008888-0000-1000-8000-00805f9b34fb';
-let device, writeChar, notifyChar, packets=0, testBusy=false;
-
-const $=id=>document.getElementById(id);
-const hex=v=>Array.from(new Uint8Array(v.buffer ?? v)).map(x=>x.toString(16).padStart(2,'0').toUpperCase()).join(' ');
-function log(s){const d=new Date().toLocaleTimeString('fr-FR'); $('log').textContent += `[${d}] ${s}\n`; $('log').scrollTop=$('log').scrollHeight}
-function state(id,text,cls=''){ $(id).textContent=text; $(id).className=cls }
-
-function onData(e){
- const h=hex(e.target.value);
- packets++; $('count').textContent=packets; $('last').textContent=h || '(vide)';
- log(`8888 ← ${h || '(vide)'}`);
-}
-
-async function connect(){
+(()=>{const $=id=>document.getElementById(id),logEl=$("log");let n=0,device;
+function log(s){const d=new Date(),t=d.toLocaleTimeString();logEl.textContent+=`[${t}] ${s}\n`;logEl.scrollTop=logEl.scrollHeight}
+function state(id,text,cls="ok"){let e=$(id);e.textContent=text;e.className=cls}
+function hex(v){let a=new Uint8Array(v.buffer,v.byteOffset,v.byteLength);return [...a].map(x=>x.toString(16).padStart(2,"0")).join(" ")}
+log("V3 démarrée.");log("Mode diagnostic lecture seule.");
+$("clear").onclick=()=>{logEl.textContent="";log("Journal effacé.")};
+$("connect").onclick=async()=>{
  try{
-  log('Ouverture du sélecteur Bluetooth…');
-  device=await navigator.bluetooth.requestDevice({filters:[{services:[SERVICE]}],optionalServices:[SERVICE]});
-  device.addEventListener('gattserverdisconnected',()=>{
-    state('conn','DÉCONNECTÉ','bad'); $('status').disabled=true; log('Déconnecté.');
-  });
-  log(`Appareil choisi : ${device.name || '(sans nom)'}`);
-  const server=await device.gatt.connect(); state('conn','CONNECTÉ','good'); log('GATT connecté.');
-  const svc=await server.getPrimaryService(SERVICE); state('svc','TROUVÉ','good'); log('Service 7777 trouvé.');
-  writeChar=await svc.getCharacteristic(WRITE); state('wr','TROUVÉ','good'); log('Characteristic 8877 trouvée.');
-  notifyChar=await svc.getCharacteristic(NOTIFY); log('Characteristic 8888 trouvée.');
-  notifyChar.addEventListener('characteristicvaluechanged',onData);
-  await notifyChar.startNotifications(); state('ntf','ACTIVES','good'); log('Notifications 8888 activées.');
-  try { const v=await notifyChar.readValue(); log(`Lecture initiale 8888 ← ${hex(v)}`); } catch(e){log(`Lecture initiale impossible : ${e.message}`)}
-  $('status').disabled=false;
-  log('Prêt. La requête STATUS ne sera envoyée que si tu appuies sur le bouton.');
- }catch(e){ state('conn','ERREUR','bad'); log(`ERREUR connexion : ${e.name}: ${e.message}`); }
-}
-
-async function sendStatus(){
- if(!writeChar || testBusy) return;
- testBusy=true; $('status').disabled=true;
- const msg=new Uint8Array([0xFF,0x55,0x01,0x00,0x55]);
- try{
-   log(`8877 → ${hex(msg)} (REQUEST_STATUS, envoi unique)`);
-   if(writeChar.properties.writeWithoutResponse && writeChar.writeValueWithoutResponse)
-      await writeChar.writeValueWithoutResponse(msg);
-   else if(writeChar.writeValueWithResponse)
-      await writeChar.writeValueWithResponse(msg);
-   else
-      await writeChar.writeValue(msg);
-   log('Écriture terminée. Écoute de 8888…');
-   setTimeout(()=>{ if(packets===0) log('Aucune notification reçue après le test.'); },2000);
- }catch(e){ log(`ERREUR écriture : ${e.name}: ${e.message}`); }
- finally{ setTimeout(()=>{testBusy=false; if(device?.gatt?.connected)$('status').disabled=false},800); }
-}
-
-$('connect').onclick=connect;
-$('status').onclick=sendStatus;
-log('V4 démarrée.');
-log('Aucune écriture automatique. Test STATUS manuel uniquement.');
-</script>
-</main></body></html>
+  log("Ouverture du sélecteur Bluetooth…");
+  device=await navigator.bluetooth.requestDevice({filters:[{name:"Scooter"}],optionalServices:["00007777-0000-1000-8000-00805f9b34fb"]});
+  log("Appareil choisi : "+(device.name||"?"));
+  device.addEventListener("gattserverdisconnected",()=>{state("conn","DÉCONNECTÉ","bad");log("GATT déconnecté.")});
+  log("Connexion GATT…");let server=await device.gatt.connect();state("conn","CONNECTÉ");log("GATT connecté.");
+  let svc=await server.getPrimaryService("00007777-0000-1000-8000-00805f9b34fb");state("svc","TROUVÉ");log("Service 7777 trouvé.");
+  try{
+   let wr=await svc.getCharacteristic("00008877-0000-1000-8000-00805f9b34fb");
+   state("wr","TROUVÉ");log("Characteristic 8877 trouvée (aucune écriture effectuée).");
+   log("8877 propriétés : write="+wr.properties.write+", writeWithoutResponse="+wr.properties.writeWithoutResponse);
+  }catch(e){state("wr","INTROUVABLE","bad");log("8877 erreur : "+e.message)}
+  let ch=await svc.getCharacteristic("00008888-0000-1000-8000-00805f9b34fb");
+  log("Characteristic 8888 trouvée.");
+  ch.addEventListener("characteristicvaluechanged",e=>{n++;$("count").textContent=n;log("8888 ← "+hex(e.target.value))});
+  await ch.startNotifications();state("ntf","ACTIVES");log("Notifications 8888 activées.");
+  try{let v=await ch.readValue();log("Lecture initiale 8888 ← "+hex(v))}catch(e){log("Lecture 8888 non disponible : "+e.message)}
+  log("En écoute. Si aucun paquet n'arrive, c'est une information utile : il faudra identifier la requête de lecture envoyée par Lenzod.");
+ }catch(e){log("ERREUR : "+(e.message||e));}
+};
+})();
+</script></body></html>
