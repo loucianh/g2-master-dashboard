@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G2 Master V6.16</title><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>G2 Master V6.17</title><style>
 html,body{width:100%;min-height:100%;overscroll-behavior:none}
 .page-home{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 25%,#12202a,#030609 62%)}
 .home-card{width:min(560px,100%);border:1px solid #34414c;border-radius:24px;padding:24px;background:#080d12;box-shadow:0 18px 60px #0008}
@@ -25,6 +25,12 @@ html,body{width:100%;min-height:100%;overscroll-behavior:none}
 
 @media (orientation:landscape){
  body{overflow-x:hidden}.app{max-width:none;width:100vw;padding:4px}.dash{width:100%;height:calc(100dvh - 104px);min-height:390px;aspect-ratio:auto;border-radius:20px;padding:12px 20px}.main{min-height:calc(100% - 74px)}.controls{max-width:760px;margin:6px auto 0}.speed{left:27%;top:26px;font-size:clamp(76px,10vw,126px)}.kmh{left:36%;top:96px;font-size:14px}.gauge{top:88px;left:8px;right:2px}.gauge svg{width:100%;height:min(31vw,250px)}.gear{top:238px;right:4px}.time{top:330px;right:4px}.master{bottom:2px}}
+
+body.ride-mode,body.ride-mode html{margin:0!important;padding:0!important;width:100%!important;height:100%!important;overflow:hidden!important;position:fixed!important;inset:0!important;touch-action:none!important;overscroll-behavior:none!important}
+body.ride-mode .page-dash{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;touch-action:none!important}
+body.ride-mode .app,body.ride-mode .dash{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;margin:0!important;border:0!important;border-radius:0!important;box-sizing:border-box!important;overflow:hidden!important}
+body.ride-mode{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+
 </style></head><body>
 <section id="homePage" class="page-home">
  <div class="home-card">
@@ -191,6 +197,7 @@ $('homeConnect').onclick=connect;
 $('homeSensor').onclick=enableSensors;
 $('startRide').onclick=async()=>{
  $('homePage').style.display='none';
+ document.body.classList.add('ride-mode');
  $('dashPage').style.display='block';
  try{if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen()}catch(e){}
  try{if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape')}catch(e){}
@@ -198,9 +205,16 @@ $('startRide').onclick=async()=>{
 };
 $('exitRide').onclick=async()=>{
  $('dashPage').style.display='none';
+ document.body.classList.remove('ride-mode');
  $('homePage').style.display='flex';
  try{if(document.fullscreenElement)await document.exitFullscreen()}catch(e){}
 };
+
+
+['touchmove','gesturestart','gesturechange','gestureend'].forEach(ev=>{
+ document.addEventListener(ev,e=>{if(document.body.classList.contains('ride-mode'))e.preventDefault()},{passive:false});
+});
+document.addEventListener('dblclick',e=>{if(document.body.classList.contains('ride-mode'))e.preventDefault()},{passive:false});
 
 if(!navigator.bluetooth){$('connect').disabled=true;$('homeConnect').disabled=true;}
 </script></body></html>
