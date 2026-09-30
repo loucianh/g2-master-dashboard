@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G2 Master V6.20</title><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G2 Master V6.21</title><style>
 html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
 .homePage{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:#030609;box-sizing:border-box}
 .homeCard{width:min(520px,100%);padding:24px;border:1px solid #26333d;border-radius:22px;background:#080d12;box-sizing:border-box}
@@ -30,12 +30,26 @@ html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
 
 @media (orientation:landscape){
  body{overflow-x:hidden}.app{max-width:none;width:100vw;padding:4px}.dash{width:100%;height:calc(100dvh - 104px);min-height:390px;aspect-ratio:auto;border-radius:20px;padding:12px 20px}.main{min-height:calc(100% - 74px)}.controls{max-width:760px;margin:6px auto 0}.speed{left:27%;top:26px;font-size:clamp(76px,10vw,126px)}.kmh{left:36%;top:96px;font-size:14px}.gauge{top:88px;left:8px;right:2px}.gauge svg{width:100%;height:min(31vw,250px)}.gear{top:238px;right:4px}.time{top:330px;right:4px}.master{bottom:2px}}
+
+/* Compteur 2 — inspiration cadran moto circulaire */
+.dash2{display:none;position:absolute;inset:0;background:#020406;color:#f4f7f8;overflow:hidden}
+.d2ring{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(75vh,62vw);aspect-ratio:1;border-radius:50%;border:12px solid #20252a;box-shadow:inset 0 0 0 3px #697078,inset 0 0 38px #000,0 0 0 3px #090c0e}
+.d2ring:before{content:"";position:absolute;inset:7%;border-radius:50%;border:3px solid #8b949b;box-shadow:inset 0 0 32px #13c8f433}
+.d2arc{position:absolute;inset:11%;border-radius:50%;border:15px solid transparent;border-top-color:#13c8f4;border-right-color:#13c8f4;transform:rotate(-45deg);filter:drop-shadow(0 0 7px #13c8f477)}
+.d2red{position:absolute;inset:5%;border-radius:50%;border:9px solid transparent;border-right-color:#ff3b45;transform:rotate(13deg)}
+.d2speed{position:absolute;left:50%;top:27%;transform:translateX(-50%);font-size:clamp(65px,8vw,110px);font-weight:950;line-height:.85}.d2unit{position:absolute;left:50%;top:43%;transform:translateX(-50%);font-size:14px;font-weight:900}
+.d2gear{position:absolute;left:50%;top:49%;transform:translateX(-50%);font-size:clamp(50px,6vw,84px);font-weight:950}.d2mode{position:absolute;left:50%;top:67%;transform:translateX(-50%);font-size:13px;font-weight:950;color:#13c8f4}
+.d2odo{position:absolute;left:50%;top:73%;transform:translateX(-50%);font-size:13px;font-weight:900;white-space:nowrap}.d2lean{position:absolute;left:50%;bottom:7%;transform:translateX(-50%);font-size:13px;color:#13c8f4;font-weight:900;white-space:nowrap}
+.d2battery{position:absolute;left:5%;top:27%;height:46%;width:32px;border-left:3px solid #e7ecef}.d2battery:before,.d2battery:after{content:"";position:absolute;left:-3px;width:30px;height:3px;background:#e7ecef}.d2battery:before{top:0}.d2battery:after{bottom:0}
+.d2batfill{position:absolute;left:6px;bottom:5px;width:12px;height:calc(var(--bat,0) * .9%);max-height:90%;background:#13c8f4;box-shadow:0 0 8px #13c8f4}.d2batpct{position:absolute;left:4%;top:20%;font-size:17px;font-weight:950}
+.d2ticks span{position:absolute;font-size:clamp(13px,1.6vw,21px);font-weight:950}.n0{left:48%;bottom:8%}.n1{left:20%;bottom:20%}.n2{left:8%;bottom:42%}.n3{left:11%;top:27%}.n4{left:25%;top:11%}.n5{left:46%;top:4%}.n6{right:25%;top:11%}.n7{right:10%;top:28%}.n8{right:7%;bottom:42%}
+.dashSelect{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.dashSelect button{margin:0!important}
 </style></head><body>
 <section id="homePage" class="homePage"><div class="homeCard">
 <h1>G2 <span>MASTER</span></h1><p>Tableau de bord Bluefy</p>
 <button id="homeConnect">CONNECTER LA G2</button>
 <button id="homeAngle">ACTIVER L’ANGLE</button>
-<button id="openCockpit" class="rideOpen">OUVRIR LE COMPTEUR</button>
+<div class="dashSelect"><button id="openCockpit" class="rideOpen">COMPTEUR 1</button><button id="openCockpit2" class="rideOpen">COMPTEUR 2</button></div>
 </div></section>
 <section id="cockpitPage" class="cockpitPage"><button id="backCockpit" class="backCockpit">‹</button>
 <main class="app"><section class="dash" id="dash"><div class="top"><div>▯ ▰▰▰▰ <span id="battery">--%</span></div><div class="odo">ODO <span id="odo">-- km</span></div><div id="mode" class="mode">G2</div></div><div class="main"><div class="turn"><span id="leftTurn">◀</span><span id="rightTurn">▶</span></div><div><div id="speed" class="speed">0</div><div class="kmh">km/h</div></div><div class="gauge"><svg viewBox="0 0 700 235" aria-label="Jauge de vitesse 0 à 80 km/h">
@@ -144,9 +158,9 @@ html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
  <polygon points="654,12 664,13 668,75 658,76"/>
  <polygon points="668,13 678,13 678,75 672,75"/>
 </g>
-</svg></div><div><div id="gear" class="gear">-</div><div class="time"><small>DURÉE</small><span id="time">00:00:00</span></div></div><div class="lean"><b id="lean">0°</b><small>INCLINAISON</small></div></div><div class="bottom"><div class="master">G2 MASTER</div><div class="line"></div><div></div></div></section><div class="controls"><button id="connect" class="connect">CONNECTER LA G2</button><button id="sensor">ANGLE</button><button id="diag">DIAGNOSTIC</button></div><div id="log" class="log"></div></main></section>
+</svg></div><div><div id="gear" class="gear">-</div><div class="time"><small>DURÉE</small><span id="time">00:00:00</span></div></div><div class="lean"><b id="lean">0°</b><small>INCLINAISON</small></div></div><div class="bottom"><div class="master">G2 MASTER</div><div class="line"></div><div></div></div></section><div id="dash2" class="dash2"><div class="d2ring"><div class="d2arc"></div><div class="d2red"></div><div class="d2ticks"><span class="n0">0</span><span class="n1">1</span><span class="n2">2</span><span class="n3">3</span><span class="n4">4</span><span class="n5">5</span><span class="n6">6</span><span class="n7">7</span><span class="n8">8</span></div><div id="d2speed" class="d2speed">0</div><div class="d2unit">km/h</div><div id="d2gear" class="d2gear">1</div><div id="d2mode" class="d2mode">ECO</div><div class="d2odo">ODO <span id="d2odo">--</span> km</div><div class="d2lean">INCLINAISON <span id="d2lean">0°</span></div></div><div id="d2batpct" class="d2batpct">--%</div><div class="d2battery"><div id="d2batfill" class="d2batfill"></div></div></div><div class="controls"><button id="connect" class="connect">CONNECTER LA G2</button><button id="sensor">ANGLE</button><button id="diag">DIAGNOSTIC</button></div><div id="log" class="log"></div></main></section>
 <script>
-const S='00007777-0000-1000-8000-00805f9b34fb',R='00008888-0000-1000-8000-00805f9b34fb',W='00008877-0000-1000-8000-00805f9b34fb',Q=new Uint8Array([255,85,1,0,85]);let d,r,w,t,busy=false,rs=0,lastVals={},diagChanges=false;const $=x=>document.getElementById(x),be=a=>a.reduce((n,b)=>n*256+b,0);function log(x){$('log').textContent=x+'\n'+$('log').textContent}function speed(v){v=Math.max(0,Math.min(80,+v||0));$('speed').textContent=Math.round(v);$('speedClipRect').setAttribute('width',700*v/80)}function mode(v){let x=v==2?['ECO','1','#54e777']:v==3?['RACE','2','#13c8f4']:v==4?['SPORT','3','#ff4549']:['G2','-','#13c8f4'];$('mode').textContent=x[0];$('gear').textContent=x[1];$('dash').style.setProperty('--a','#13c8f4')}function tm(m){let s=Math.round(m*60),h=Math.floor(s/3600),mi=Math.floor(s%3600/60),ss=s%60;return[h,mi,ss].map(x=>String(x).padStart(2,'0')).join(':')}function pkt(u){if(u.length<5||u[0]!=255||u[1]!=85)return;let id=u[2],v=be([...u.slice(4,4+u[3])]);
+const S='00007777-0000-1000-8000-00805f9b34fb',R='00008888-0000-1000-8000-00805f9b34fb',W='00008877-0000-1000-8000-00805f9b34fb',Q=new Uint8Array([255,85,1,0,85]);let d,r,w,t,busy=false,rs=0,lastVals={},diagChanges=false;const $=x=>document.getElementById(x),be=a=>a.reduce((n,b)=>n*256+b,0);function log(x){$('log').textContent=x+'\n'+$('log').textContent}function speed(v){v=Math.max(0,Math.min(80,+v||0));$('speed').textContent=Math.round(v);$('d2speed').textContent=Math.round(v);$('speedClipRect').setAttribute('width',700*v/80)}function mode(v){let x=v==2?['ECO','1','#54e777']:v==3?['RACE','2','#13c8f4']:v==4?['SPORT','3','#ff4549']:['G2','-','#13c8f4'];$('mode').textContent=x[0];$('gear').textContent=x[1];$('dash').style.setProperty('--a','#13c8f4')}function tm(m){let s=Math.round(m*60),h=Math.floor(s/3600),mi=Math.floor(s%3600/60),ss=s%60;return[h,mi,ss].map(x=>String(x).padStart(2,'0')).join(':')}function pkt(u){if(u.length<5||u[0]!=255||u[1]!=85)return;let id=u[2],v=be([...u.slice(4,4+u[3])]);
 if(diagChanges && lastVals[id]!==undefined && lastVals[id]!==v)
  log('ID 0x'+id.toString(16).padStart(2,'0').toUpperCase()+' : '+lastVals[id]+' → '+v+' | HEX '+[...u.slice(4,4+u[3])].map(x=>x.toString(16).padStart(2,'0')).join(' '));
 lastVals[id]=v;if(id==10){
@@ -162,7 +176,7 @@ speed(rs)
 function setLean(deg){
  if(!Number.isFinite(deg))return;
  deg=Math.max(-90,Math.min(90,deg));
- $('lean').textContent=(deg>0?'+':'')+Math.round(deg)+'°';
+ $('lean').textContent=(deg>0?'+':'')+Math.round(deg)+'°';$('d2lean').textContent=(deg>0?'+':'')+Math.round(deg)+'°';
 }
 function orientationLean(e){
  // gamma = inclinaison gauche/droite en portrait.
@@ -197,6 +211,17 @@ $('backCockpit').onclick=()=>{
  $('homePage').style.display='flex';
  window.scrollTo(0,0);
 };
+
+function syncD2(){
+ if($('gear'))$('d2gear').textContent=$('gear').textContent.trim();
+ if($('mode'))$('d2mode').textContent=$('mode').textContent.trim();
+ if($('odo'))$('d2odo').textContent=$('odo').textContent.replace(/[^\d.,]/g,'');
+ if($('bat')){let s=$('bat').textContent,p=parseInt(s)||0;$('d2batpct').textContent=s;$('d2batfill').style.setProperty('--bat',p)}
+}
+['gear','mode','odo','bat'].forEach(id=>{let e=$(id);if(e)new MutationObserver(syncD2).observe(e,{childList:true,subtree:true,characterData:true})});syncD2();
+$('openCockpit2').onclick=()=>{$('homePage').style.display='none';$('cockpitPage').style.display='block';$('dash1').style.display='none';$('dash2').style.display='block';window.scrollTo(0,0);syncD2()};
+$('openCockpit').addEventListener('click',()=>{$('dash1').style.display='block';$('dash2').style.display='none'});
+
 /* Bluefy: verrouille seulement notre contenu, sans essayer de redimensionner le navigateur */
 ['touchmove','gesturestart','gesturechange','gestureend'].forEach(ev=>{
  document.addEventListener(ev,e=>{
