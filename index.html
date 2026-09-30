@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>G2 Master V6.17</title><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>G2 Master V6.18</title><style>
 html,body{width:100%;min-height:100%;overscroll-behavior:none}
 .page-home{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 25%,#12202a,#030609 62%)}
 .home-card{width:min(560px,100%);border:1px solid #34414c;border-radius:24px;padding:24px;background:#080d12;box-shadow:0 18px 60px #0008}
@@ -30,6 +30,30 @@ body.ride-mode,body.ride-mode html{margin:0!important;padding:0!important;width:
 body.ride-mode .page-dash{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;touch-action:none!important}
 body.ride-mode .app,body.ride-mode .dash{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;margin:0!important;border:0!important;border-radius:0!important;box-sizing:border-box!important;overflow:hidden!important}
 body.ride-mode{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+
+
+/* V6.18 — mode cockpit iPhone/Bluefy */
+body.ride-mode{margin:0!important;padding:0!important;overflow:hidden!important;background:#030609!important;
+ position:fixed!important;left:0!important;top:0!important;width:100vw!important;height:100dvh!important;
+ touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
+body.ride-mode .page-dash{display:block!important;position:fixed!important;inset:0!important;margin:0!important;padding:0!important;
+ width:100vw!important;height:100dvh!important;overflow:hidden!important;background:#030609!important}
+body.ride-mode .app,body.ride-mode .dash{position:absolute!important;inset:0!important;margin:0!important;padding:0!important;
+ width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;border:0!important;border-radius:0!important;
+ overflow:hidden!important;box-sizing:border-box!important;background:#030609!important}
+body.ride-mode .dash{padding-left:max(12px,env(safe-area-inset-left))!important;
+ padding-right:max(12px,env(safe-area-inset-right))!important;
+ padding-top:max(8px,env(safe-area-inset-top))!important;
+ padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
+body.ride-mode .exitRide{left:max(6px,env(safe-area-inset-left))!important;bottom:max(6px,env(safe-area-inset-bottom))!important}
+body.ride-mode .main{min-height:calc(100% - 76px)!important}
+body.ride-mode .gauge{left:2%!important;right:2%!important;top:15%!important}
+body.ride-mode .gauge svg{width:100%!important;height:58vh!important;max-height:none!important}
+body.ride-mode .speed{top:7%!important}
+body.ride-mode .kmh{top:26%!important}
+body.ride-mode .gear{right:max(8px,env(safe-area-inset-right))!important;bottom:19%!important}
+body.ride-mode .time{right:max(8px,env(safe-area-inset-right))!important;bottom:13%!important}
+body.ride-mode .lean{bottom:max(7px,env(safe-area-inset-bottom))!important}
 
 </style></head><body>
 <section id="homePage" class="page-home">
@@ -200,8 +224,12 @@ $('startRide').onclick=async()=>{
  document.body.classList.add('ride-mode');
  $('dashPage').style.display='block';
  try{if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen()}catch(e){}
- try{if(screen.orientation&&screen.orientation.lock)await screen.orientation.lock('landscape')}catch(e){}
- setTimeout(()=>window.dispatchEvent(new Event('resize')),120);
+ try{
+ if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape');
+}catch(e){
+ log('iPhone : rotation automatique non autorisée par ce navigateur — tourne le téléphone une fois en paysage.');
+}
+ fitCockpit();setTimeout(fitCockpit,120);setTimeout(fitCockpit,500);
 };
 $('exitRide').onclick=async()=>{
  $('dashPage').style.display='none';
@@ -210,6 +238,21 @@ $('exitRide').onclick=async()=>{
  try{if(document.fullscreenElement)await document.exitFullscreen()}catch(e){}
 };
 
+
+
+function fitCockpit(){
+ if(!document.body.classList.contains('ride-mode'))return;
+ const vv=window.visualViewport;
+ const w=vv?vv.width:window.innerWidth, h=vv?vv.height:window.innerHeight;
+ const p=$('dashPage');
+ p.style.width=w+'px'; p.style.height=h+'px';
+ p.style.left=(vv?vv.offsetLeft:0)+'px'; p.style.top=(vv?vv.offsetTop:0)+'px';
+}
+window.addEventListener('resize',fitCockpit,{passive:true});
+if(window.visualViewport){
+ visualViewport.addEventListener('resize',fitCockpit,{passive:true});
+ visualViewport.addEventListener('scroll',fitCockpit,{passive:true});
+}
 
 ['touchmove','gesturestart','gesturechange','gestureend'].forEach(ev=>{
  document.addEventListener(ev,e=>{if(document.body.classList.contains('ride-mode'))e.preventDefault()},{passive:false});
