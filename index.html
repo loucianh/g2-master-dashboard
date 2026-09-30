@@ -1,4 +1,4 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G2 Master V6.21</title><style>
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G2 Master V6.22</title><style>
 html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
 .homePage{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:#030609;box-sizing:border-box}
 .homeCard{width:min(520px,100%);padding:24px;border:1px solid #26333d;border-radius:22px;background:#080d12;box-sizing:border-box}
@@ -44,15 +44,41 @@ html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
 .d2batfill{position:absolute;left:6px;bottom:5px;width:12px;height:calc(var(--bat,0) * .9%);max-height:90%;background:#13c8f4;box-shadow:0 0 8px #13c8f4}.d2batpct{position:absolute;left:4%;top:20%;font-size:17px;font-weight:950}
 .d2ticks span{position:absolute;font-size:clamp(13px,1.6vw,21px);font-weight:950}.n0{left:48%;bottom:8%}.n1{left:20%;bottom:20%}.n2{left:8%;bottom:42%}.n3{left:11%;top:27%}.n4{left:25%;top:11%}.n5{left:46%;top:4%}.n6{right:25%;top:11%}.n7{right:10%;top:28%}.n8{right:7%;bottom:42%}
 .dashSelect{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.dashSelect button{margin:0!important}
+
+.settingsPage{display:none;position:fixed;inset:0;background:#030609;overflow:auto;padding:18px;box-sizing:border-box}
+.settingsCard{width:min(620px,100%);margin:auto;background:#080d12;border:1px solid #26333d;border-radius:22px;padding:22px}
+.settingsTop{display:flex;align-items:center;gap:12px}.settingsTop button{width:46px;padding:0}.settingsTop h2{margin:0}
+.settingBox{margin-top:18px;padding:16px;border:1px solid #26333d;border-radius:16px;background:#0b1117}
+.settingBox h3{margin:0 0 6px}.settingBox p{margin:5px 0;color:#94a1aa;font-size:13px}
+.paRow{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:14px}
+.paBtn{padding:0;min-height:48px}.paBtn.sel{border-color:#13c8f4;color:#13c8f4;box-shadow:inset 0 0 0 1px #13c8f4}
+.settingState{margin-top:12px;color:#13c8f4;font-weight:900}
+.disabledApply{width:100%;margin-top:12px;opacity:.45}
+
 </style></head><body>
 <section id="homePage" class="homePage"><div class="homeCard">
 <h1>G2 <span>MASTER</span></h1><p>Tableau de bord Bluefy</p>
 <button id="homeConnect">CONNECTER LA G2</button>
 <button id="homeAngle">ACTIVER L’ANGLE</button>
-<div class="dashSelect"><button id="openCockpit" class="rideOpen">COMPTEUR 1</button><button id="openCockpit2" class="rideOpen">COMPTEUR 2</button></div>
+<div class="dashSelect"><button id="openCockpit" class="rideOpen">COMPTEUR 1</button><button id="openCockpit2" class="rideOpen">COMPTEUR 2</button></div><button id="openSettings">PARAMÈTRES</button>
 </div></section>
+
+<section id="settingsPage" class="settingsPage">
+ <div class="settingsCard">
+  <div class="settingsTop"><button id="backSettings">‹</button><h2>PARAMÈTRES G2 MASTER</h2></div>
+  <div class="settingBox">
+   <h3>PA — Force d’accélération</h3>
+   <p>Valeur prévue : 1 = douce, 5 = maximale.</p>
+   <div class="paRow"><button class="paBtn" data-pa="1">1</button><button class="paBtn" data-pa="2">2</button><button class="paBtn" data-pa="3">3</button><button class="paBtn" data-pa="4">4</button><button class="paBtn" data-pa="5">5</button></div>
+   <div id="paState" class="settingState">Commande Bluetooth PA à identifier</div>
+   <button class="disabledApply" disabled>ENVOYER À LA G2 — VERROUILLÉ</button>
+   <p>Je n’envoie encore aucune commande inconnue au contrôleur. Cette page est prête pour recevoir la commande PA dès qu’on l’a identifiée précisément.</p>
+  </div>
+ </div>
+</section>
+
 <section id="cockpitPage" class="cockpitPage"><button id="backCockpit" class="backCockpit">‹</button>
-<main class="app"><section class="dash" id="dash"><div class="top"><div>▯ ▰▰▰▰ <span id="battery">--%</span></div><div class="odo">ODO <span id="odo">-- km</span></div><div id="mode" class="mode">G2</div></div><div class="main"><div class="turn"><span id="leftTurn">◀</span><span id="rightTurn">▶</span></div><div><div id="speed" class="speed">0</div><div class="kmh">km/h</div></div><div class="gauge"><svg viewBox="0 0 700 235" aria-label="Jauge de vitesse 0 à 80 km/h">
+<main class="app"><section class="dash" id="dash1"><div class="top"><div>▯ ▰▰▰▰ <span id="battery">--%</span></div><div class="odo">ODO <span id="odo">-- km</span></div><div id="mode" class="mode">G2</div></div><div class="main"><div class="turn"><span id="leftTurn">◀</span><span id="rightTurn">▶</span></div><div><div id="speed" class="speed">0</div><div class="kmh">km/h</div></div><div class="gauge"><svg viewBox="0 0 700 235" aria-label="Jauge de vitesse 0 à 80 km/h">
 <defs>
   <clipPath id="speedClip"><rect id="speedClipRect" x="0" y="0" width="0" height="235"/></clipPath>
   <linearGradient id="trackShade" x1="0" x2="1">
@@ -208,17 +234,28 @@ $('openCockpit').onclick=()=>{
 };
 $('backCockpit').onclick=()=>{
  $('cockpitPage').style.display='none';
+ $('dash1').style.display='block';$('dash2').style.display='none';
  $('homePage').style.display='flex';
  window.scrollTo(0,0);
 };
+
+
+let selectedPA=3;
+document.querySelectorAll('.paBtn').forEach(b=>b.onclick=()=>{
+ selectedPA=+b.dataset.pa;
+ document.querySelectorAll('.paBtn').forEach(x=>x.classList.toggle('sel',x===b));
+ $('paState').textContent='PA sélectionné : '+selectedPA+' / 5 — pas encore envoyé';
+});
+$('openSettings').onclick=()=>{$('homePage').style.display='none';$('settingsPage').style.display='block';};
+$('backSettings').onclick=()=>{$('settingsPage').style.display='none';$('homePage').style.display='flex';};
 
 function syncD2(){
  if($('gear'))$('d2gear').textContent=$('gear').textContent.trim();
  if($('mode'))$('d2mode').textContent=$('mode').textContent.trim();
  if($('odo'))$('d2odo').textContent=$('odo').textContent.replace(/[^\d.,]/g,'');
- if($('bat')){let s=$('bat').textContent,p=parseInt(s)||0;$('d2batpct').textContent=s;$('d2batfill').style.setProperty('--bat',p)}
+ if($('battery')){let s=$('battery').textContent,p=parseInt(s)||0;$('d2batpct').textContent=s;$('d2batfill').style.setProperty('--bat',p)}
 }
-['gear','mode','odo','bat'].forEach(id=>{let e=$(id);if(e)new MutationObserver(syncD2).observe(e,{childList:true,subtree:true,characterData:true})});syncD2();
+['gear','mode','odo','battery'].forEach(id=>{let e=$(id);if(e)new MutationObserver(syncD2).observe(e,{childList:true,subtree:true,characterData:true})});syncD2();
 $('openCockpit2').onclick=()=>{$('homePage').style.display='none';$('cockpitPage').style.display='block';$('dash1').style.display='none';$('dash2').style.display='block';window.scrollTo(0,0);syncD2()};
 $('openCockpit').addEventListener('click',()=>{$('dash1').style.display='block';$('dash2').style.display='none'});
 
