@@ -1,21 +1,26 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"><title>G2 Master V6.19</title><style>
-html,body{width:100%;min-height:100%;overscroll-behavior:none}
-.page-home{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 25%,#12202a,#030609 62%)}
-.home-card{width:min(560px,100%);border:1px solid #34414c;border-radius:24px;padding:24px;background:#080d12;box-shadow:0 18px 60px #0008}
-.home-title{font-size:34px;font-weight:1000;font-style:italic}.home-title span{color:#13c8f4}
-.home-sub{color:#91a0aa;margin:5px 0 22px}.status{padding:12px;border:1px solid #26333d;border-radius:13px;margin:10px 0;color:#9aa8b2}
-.home-actions{display:grid;gap:10px}.home-actions button{width:100%}.ride-btn{background:#13c8f4!important;color:#021016!important;font-size:16px}
-.page-dash{display:none;background:#030609;width:100vw;height:100dvh;overflow:hidden}
-.page-dash .app{width:100vw;height:100dvh;max-width:none;padding:0}
-.page-dash .dash{width:100vw;height:100dvh;min-height:0;border-radius:0;border:0;padding:12px 20px}
-.page-dash .controls,.page-dash .log{display:none!important}
-.exitRide{position:fixed;left:8px;bottom:7px;z-index:30;width:38px;height:38px;min-height:38px;padding:0;border-radius:50%;opacity:.28;font-size:18px}
-.page-dash .main{min-height:calc(100dvh - 92px)}
-.page-dash .gauge{top:clamp(92px,24vh,160px)}
-.page-dash .gauge svg{height:min(43vh,310px)}
-.page-dash .gear{top:auto;bottom:64px}.page-dash .time{top:auto;bottom:30px}
-.page-dash .lean{bottom:4px}
-@media(max-width:600px) and (orientation:portrait){.page-dash .dash{padding:10px}.page-dash .main{min-height:calc(100dvh - 85px)}}
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>G2 Master V6.20</title><style>
+html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}
+.homePage{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;background:#030609;box-sizing:border-box}
+.homeCard{width:min(520px,100%);padding:24px;border:1px solid #26333d;border-radius:22px;background:#080d12;box-sizing:border-box}
+.homeCard h1{margin:0 0 4px;font-style:italic}.homeCard h1 span{color:#13c8f4}.homeCard p{color:#8998a2;margin:0 0 18px}
+.homeCard button{width:100%;margin-top:10px}.rideOpen{background:#13c8f4!important;color:#021016!important}
+.cockpitPage{display:none;position:fixed;inset:0;background:#030609;overflow:hidden;touch-action:none}
+.cockpitPage .app{position:absolute;inset:0;width:100%;height:100%;max-width:none;margin:0;padding:4px 8px;box-sizing:border-box;overflow:hidden}
+.cockpitPage .dash{width:100%;height:100%;min-height:0;aspect-ratio:auto;margin:0;border:0;border-radius:0;box-sizing:border-box;overflow:hidden}
+.cockpitPage .controls,.cockpitPage .log{display:none!important}
+.cockpitPage .main{min-height:calc(100% - 76px)}
+.cockpitPage .gauge{top:clamp(92px,17vh,132px);left:4%;right:4%}
+.cockpitPage .gauge svg{width:100%;height:min(43vh,270px)}
+.cockpitPage .speed{top:22px;left:27%;font-size:clamp(70px,10vw,120px)}
+.cockpitPage .kmh{top:96px;left:36%}
+.cockpitPage .gear{top:auto;bottom:76px;right:12px}
+.cockpitPage .time{top:auto;bottom:42px;right:10px}
+.cockpitPage .lean{bottom:5px}
+.backCockpit{position:fixed;left:8px;bottom:8px;z-index:40;width:34px!important;height:34px;min-height:34px;padding:0!important;border-radius:50%!important;opacity:.25}
+@media(orientation:portrait){
+ .cockpitPage .speed{left:21%;top:55px}.cockpitPage .kmh{left:39%;top:128px}
+ .cockpitPage .gauge{top:150px}.cockpitPage .gauge svg{height:36vh}
+}
 
 *{box-sizing:border-box}body{margin:0;background:#030609;color:#f7f9fb;font-family:Arial,sans-serif}.app{width:100%;max-width:1180px;margin:auto;padding:8px}.dash{--a:#13c8f4;background:radial-gradient(circle at 50% 35%,#0c151d,#030609 65%);border:2px solid #34414c;border-radius:24px;padding:18px;overflow:hidden}.top{display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;border-bottom:2px solid var(--a);padding-bottom:8px;font-weight:900}.odo{text-align:center}.mode{text-align:right;color:var(--a);font-size:22px;font-style:italic}.main{position:relative;display:block;padding-top:12px;min-height:382px}.speed{position:absolute;left:25%;top:38px;transform:translateX(-50%);z-index:3;font-size:112px;line-height:.78;font-weight:1000;font-style:italic;letter-spacing:-8px;text-shadow:0 0 1px #fff}.kmh{position:absolute;left:34%;top:106px;z-index:3;margin:0;font-size:13px;font-weight:800}.gauge{position:absolute;left:0;right:-3px;top:123px;z-index:1}.gauge svg{width:100%;height:252px;display:block;overflow:visible}.track{fill:none;stroke:#17212a;stroke-width:26}.rim{fill:none;stroke:#e6edf2;stroke-width:2}.red{fill:none;stroke:#ff3d43;stroke-width:23;stroke-dasharray:15 85;stroke-dashoffset:-85}.ticks{fill:#eef3f6;font-size:11px;font-weight:900}.gear{position:absolute;right:3px;top:258px;width:88px;height:82px;display:flex;align-items:center;justify-content:center;z-index:3;font-size:72px;font-weight:950;font-style:italic;color:var(--a);border:2px solid var(--a);border-radius:9px;text-align:center}.time{position:absolute;right:0;top:320px;width:82px;text-align:center;font-weight:900;margin:0}.time small{display:block;color:#9ba6b0;font-size:9px}.turn{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:28px;z-index:5}
 .turn span{font-size:25px;color:#34414c;font-weight:1000;transition:.12s}.turn span.on{color:#13c8f4;text-shadow:0 0 14px #13c8f4}
@@ -25,62 +30,14 @@ html,body{width:100%;min-height:100%;overscroll-behavior:none}
 
 @media (orientation:landscape){
  body{overflow-x:hidden}.app{max-width:none;width:100vw;padding:4px}.dash{width:100%;height:calc(100dvh - 104px);min-height:390px;aspect-ratio:auto;border-radius:20px;padding:12px 20px}.main{min-height:calc(100% - 74px)}.controls{max-width:760px;margin:6px auto 0}.speed{left:27%;top:26px;font-size:clamp(76px,10vw,126px)}.kmh{left:36%;top:96px;font-size:14px}.gauge{top:88px;left:8px;right:2px}.gauge svg{width:100%;height:min(31vw,250px)}.gear{top:238px;right:4px}.time{top:330px;right:4px}.master{bottom:2px}}
-
-body.ride-mode,body.ride-mode html{margin:0!important;padding:0!important;width:100%!important;height:100%!important;overflow:hidden!important;position:fixed!important;inset:0!important;touch-action:none!important;overscroll-behavior:none!important}
-body.ride-mode .page-dash{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important;touch-action:none!important}
-body.ride-mode .app,body.ride-mode .dash{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;margin:0!important;border:0!important;border-radius:0!important;box-sizing:border-box!important;overflow:hidden!important}
-body.ride-mode{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
-
-
-/* V6.18 — mode cockpit iPhone/Bluefy */
-body.ride-mode{margin:0!important;padding:0!important;overflow:hidden!important;background:#030609!important;
- position:fixed!important;left:0!important;top:0!important;width:100vw!important;height:100dvh!important;
- touch-action:none!important;-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none!important}
-body.ride-mode .page-dash{display:block!important;position:fixed!important;inset:0!important;margin:0!important;padding:0!important;
- width:100vw!important;height:100dvh!important;overflow:hidden!important;background:#030609!important}
-body.ride-mode .app,body.ride-mode .dash{position:absolute!important;inset:0!important;margin:0!important;padding:0!important;
- width:100%!important;height:100%!important;max-width:none!important;min-height:0!important;border:0!important;border-radius:0!important;
- overflow:hidden!important;box-sizing:border-box!important;background:#030609!important}
-body.ride-mode .dash{padding-left:max(12px,env(safe-area-inset-left))!important;
- padding-right:max(12px,env(safe-area-inset-right))!important;
- padding-top:max(8px,env(safe-area-inset-top))!important;
- padding-bottom:max(8px,env(safe-area-inset-bottom))!important}
-body.ride-mode .exitRide{left:max(6px,env(safe-area-inset-left))!important;bottom:max(6px,env(safe-area-inset-bottom))!important}
-body.ride-mode .main{min-height:calc(100% - 76px)!important}
-body.ride-mode .gauge{left:2%!important;right:2%!important;top:15%!important}
-body.ride-mode .gauge svg{width:100%!important;height:58vh!important;max-height:none!important}
-body.ride-mode .speed{top:7%!important}
-body.ride-mode .kmh{top:26%!important}
-body.ride-mode .gear{right:max(8px,env(safe-area-inset-right))!important;bottom:19%!important}
-body.ride-mode .time{right:max(8px,env(safe-area-inset-right))!important;bottom:13%!important}
-body.ride-mode .lean{bottom:max(7px,env(safe-area-inset-bottom))!important}
-
-
-/* V6.19 — Bluefy/iPhone: pas d'offset VisualViewport */
-body.ride-mode{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;
- margin:0!important;padding:0!important;overflow:hidden!important;background:#030609!important}
-body.ride-mode #dashPage{position:fixed!important;inset:0!important;left:0!important;top:0!important;
- width:100vw!important;height:100dvh!important;margin:0!important;padding:0!important;overflow:hidden!important}
-body.ride-mode #dashPage .app,body.ride-mode #dashPage .dash{
- position:absolute!important;inset:0!important;left:0!important;top:0!important;
- width:100vw!important;height:100dvh!important;margin:0!important;max-width:none!important;
- border:0!important;border-radius:0!important;overflow:hidden!important;box-sizing:border-box!important}
-
 </style></head><body>
-<section id="homePage" class="page-home">
- <div class="home-card">
-  <div class="home-title">G2 <span>MASTER</span></div>
-  <div class="home-sub">Tableau de bord</div>
-  <div id="homeStatus" class="status">G2 non connectée</div>
-  <div class="home-actions">
-   <button id="homeConnect" class="connect">CONNECTER LA G2</button>
-   <button id="homeSensor">ACTIVER L’ANGLE</button>
-   <button id="startRide" class="ride-btn">OUVRIR LE COMPTEUR</button>
-  </div>
-  <div id="homeLog" class="log"></div>
- </div>
-</section>
-<section id="dashPage" class="page-dash"><button id="exitRide" class="exitRide">‹</button>
+<section id="homePage" class="homePage"><div class="homeCard">
+<h1>G2 <span>MASTER</span></h1><p>Tableau de bord Bluefy</p>
+<button id="homeConnect">CONNECTER LA G2</button>
+<button id="homeAngle">ACTIVER L’ANGLE</button>
+<button id="openCockpit" class="rideOpen">OUVRIR LE COMPTEUR</button>
+</div></section>
+<section id="cockpitPage" class="cockpitPage"><button id="backCockpit" class="backCockpit">‹</button>
 <main class="app"><section class="dash" id="dash"><div class="top"><div>▯ ▰▰▰▰ <span id="battery">--%</span></div><div class="odo">ODO <span id="odo">-- km</span></div><div id="mode" class="mode">G2</div></div><div class="main"><div class="turn"><span id="leftTurn">◀</span><span id="rightTurn">▶</span></div><div><div id="speed" class="speed">0</div><div class="kmh">km/h</div></div><div class="gauge"><svg viewBox="0 0 700 235" aria-label="Jauge de vitesse 0 à 80 km/h">
 <defs>
   <clipPath id="speedClip"><rect id="speedClipRect" x="0" y="0" width="0" height="235"/></clipPath>
@@ -197,7 +154,7 @@ let raw=v,base=raw/1000,wrap=(raw+65536)/1000;
 if(rs>52 && raw<20000 && Math.abs(wrap-rs)<Math.abs(base-rs)) rs=wrap;
 else rs=base;
 speed(rs)
-}if(id==12)$('odo').textContent=(v/1000).toFixed(1)+' km';if(id==13)$('battery').textContent=v+'%';if(id==31)mode(v);if(id==34)$('time').textContent=tm(v)}async function req(){if(!w||busy)return;busy=true;try{await w.writeValue(Q)}catch(e){log(e.message)}finally{busy=false}}function sweep(){let z=performance.now();function f(n){let p=Math.min(1,(n-z)/1800),v=p<.5?160*p:160*(1-p);speed(v);if(p<1)requestAnimationFrame(f);else speed(rs)}requestAnimationFrame(f)}async function connect(){try{$('connect').disabled=true;d=await navigator.bluetooth.requestDevice({filters:[{name:'Scooter'}],optionalServices:[S]});let g=await d.gatt.connect(),s=await g.getPrimaryService(S);r=await s.getCharacteristic(R);w=await s.getCharacteristic(W);await r.startNotifications();r.addEventListener('characteristicvaluechanged',e=>pkt(new Uint8Array(e.target.value.buffer,e.target.value.byteOffset,e.target.value.byteLength)));$('connect').textContent='G2 CONNECTÉE';$('homeConnect').textContent='G2 CONNECTÉE';$('homeStatus').textContent='G2 connectée • prête';sweep();setTimeout(req,1900);t=setInterval(req,2000)}catch(e){log(e.message);$('connect').disabled=false;$('homeConnect').disabled=false}}$('connect').onclick=connect;$('diag').onclick=()=>{
+}if(id==12)$('odo').textContent=(v/1000).toFixed(1)+' km';if(id==13)$('battery').textContent=v+'%';if(id==31)mode(v);if(id==34)$('time').textContent=tm(v)}async function req(){if(!w||busy)return;busy=true;try{await w.writeValue(Q)}catch(e){log(e.message)}finally{busy=false}}function sweep(){let z=performance.now();function f(n){let p=Math.min(1,(n-z)/1800),v=p<.5?160*p:160*(1-p);speed(v);if(p<1)requestAnimationFrame(f);else speed(rs)}requestAnimationFrame(f)}async function connect(){try{$('connect').disabled=true;d=await navigator.bluetooth.requestDevice({filters:[{name:'Scooter'}],optionalServices:[S]});let g=await d.gatt.connect(),s=await g.getPrimaryService(S);r=await s.getCharacteristic(R);w=await s.getCharacteristic(W);await r.startNotifications();r.addEventListener('characteristicvaluechanged',e=>pkt(new Uint8Array(e.target.value.buffer,e.target.value.byteOffset,e.target.value.byteLength)));$('connect').textContent='G2 CONNECTÉE';sweep();setTimeout(req,1900);t=setInterval(req,2000)}catch(e){log(e.message);$('connect').disabled=false}}$('connect').onclick=connect;$('diag').onclick=()=>{
  $('log').classList.toggle('show');
  diagChanges=$('log').classList.contains('show');
  if(diagChanges) log('DIAGNOSTIC ACTIF — fais : gauche → arrêt → droite → arrêt');
@@ -229,45 +186,23 @@ $('sensor').onclick=enableSensors;
 
 
 $('homeConnect').onclick=connect;
-$('homeSensor').onclick=enableSensors;
-$('startRide').onclick=async()=>{
+$('homeAngle').onclick=enableSensors;
+$('openCockpit').onclick=()=>{
  $('homePage').style.display='none';
- document.body.classList.add('ride-mode');
- $('dashPage').style.display='block';
- try{if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen()}catch(e){}
- try{
- if(screen.orientation&&screen.orientation.lock) await screen.orientation.lock('landscape');
-}catch(e){
- log('iPhone : rotation automatique non autorisée par ce navigateur — tourne le téléphone une fois en paysage.');
-}
- fitCockpit();setTimeout(fitCockpit,120);setTimeout(fitCockpit,500);
-};
-$('exitRide').onclick=async()=>{
- $('dashPage').style.display='none';
- document.body.classList.remove('ride-mode');
- $('homePage').style.display='flex';
- try{if(document.fullscreenElement)await document.exitFullscreen()}catch(e){}
-};
-
-
-
-function fitCockpit(){
- if(!document.body.classList.contains('ride-mode'))return;
- const p=$('dashPage');
- p.style.left='0px';p.style.top='0px';
- p.style.width='100vw';p.style.height='100dvh';
+ $('cockpitPage').style.display='block';
  window.scrollTo(0,0);
-}
-window.addEventListener('resize',fitCockpit,{passive:true});
-if(window.visualViewport){
- visualViewport.addEventListener('resize',fitCockpit,{passive:true});
- visualViewport.addEventListener('scroll',fitCockpit,{passive:true});
-}
-
+};
+$('backCockpit').onclick=()=>{
+ $('cockpitPage').style.display='none';
+ $('homePage').style.display='flex';
+ window.scrollTo(0,0);
+};
+/* Bluefy: verrouille seulement notre contenu, sans essayer de redimensionner le navigateur */
 ['touchmove','gesturestart','gesturechange','gestureend'].forEach(ev=>{
- document.addEventListener(ev,e=>{if(document.body.classList.contains('ride-mode'))e.preventDefault()},{passive:false});
+ document.addEventListener(ev,e=>{
+  if($('cockpitPage').style.display==='block') e.preventDefault();
+ },{passive:false});
 });
-document.addEventListener('dblclick',e=>{if(document.body.classList.contains('ride-mode'))e.preventDefault()},{passive:false});
 
 if(!navigator.bluetooth){$('connect').disabled=true;$('homeConnect').disabled=true;}
 </script></body></html>
